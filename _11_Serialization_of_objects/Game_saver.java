@@ -40,6 +40,7 @@ public class Game_saver {
 			os.writeObject(two);
 			os.writeObject(three);
 			os.close();
+		}
 		catch(IOException ex)
 		{
 			ex.printStackTrace();
