@@ -13,7 +13,8 @@ public class WorldChatClient implements ActionListener {
 	Socket sock;
 	String clientName;
 
-	public WorldChatClient(String name)
+
+	WorldChatClient(String name)
 	{
 		clientName = name;
 	}
@@ -58,6 +59,8 @@ public class WorldChatClient implements ActionListener {
 		panel.add(pane2);
 
 		setupNetwork();
+
+		// Make a thread that has task to keep reading incoming msgs from the server while the main method will keep sending the msgs to server.
 		Thread task2 = new Thread(new IncomingReaderStack());
 		task2.start();
 
@@ -75,7 +78,7 @@ public class WorldChatClient implements ActionListener {
 		//System.out.println(message);
 		try
 		{
-			writer.println(message);						// println() adds newLine at end of message.
+			writer.println(clientName+" : "+message);
 			writer.flush();
 		}
 		catch(Exception ex){ex.printStackTrace();}
@@ -89,9 +92,9 @@ public class WorldChatClient implements ActionListener {
 
 		try
 		{
-			sock = new Socket("127.0.0.1", 4242);
-			writer = new PrintWriter(sock.getOutputStream());
-			reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			sock = new Socket("127.0.0.1", 4242);											// Connect with server with this ip address (localhost) and at this port.
+			writer = new PrintWriter(sock.getOutputStream());								// Get output stream of Socket
+			reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));		// Get input stream of Socket.
 		}
 		catch(IOException ex){ex.printStackTrace();}
 
@@ -105,9 +108,7 @@ public class WorldChatClient implements ActionListener {
 			System.out.println("You should provide ur name. Try again !");
 			return;
 		}
-
 		WorldChatClient chat = new WorldChatClient(args[0]);
-
 		chat.go();
 	}
 
